@@ -1,0 +1,46 @@
+<?php
+
+namespace DummyNamespace;
+
+use Laravel\Dusk\Scraper;
+use Laravel\Dusk\ScraperBrowser;
+
+class DummyClass extends Scraper
+{
+    /**
+     * Scrape the page.
+     *
+     * @return void
+     */
+    public function scrape()
+    {
+        $this->prepare();
+        $headline = '';
+        $this->browse(function (ScraperBrowser $browser) use (&$headline){
+            $browser->visit('https://laravel.com/');
+            $headline = $browser->element("h1")->getText();
+        });
+        $this->finish();
+        return $headline;
+    }
+
+    /**
+     * Prepare for Scraper execution.
+     *
+     * @return void
+     */
+    public static function prepare()
+    {
+        static::startChromeDriver();
+    }
+
+    /**
+     * Finish the Scraper execution.
+     *
+     * @return void
+     */
+    public static function finish()
+    {
+        static::stopChromeDriver();
+    }
+}
