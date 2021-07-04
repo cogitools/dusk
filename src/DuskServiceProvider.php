@@ -46,6 +46,7 @@ class DuskServiceProvider extends ServiceProvider
                 Console\PageCommand::class,
                 Console\PurgeCommand::class,
                 Console\ScraperCommand::class,
+                Console\ScraperJobCommand::class,
                 Console\ComponentCommand::class,
                 Console\ChromeDriverCommand::class,
             ]);
