@@ -4,6 +4,7 @@ namespace Laravel\Dusk\Console;
 
 use Illuminate\Console\GeneratorCommand;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Artisan;
 
 class ScraperCommand extends GeneratorCommand
 {
@@ -12,7 +13,7 @@ class ScraperCommand extends GeneratorCommand
      *
      * @var string
      */
-    protected $signature = 'dusk:scraper {name : The name of the class}';
+    protected $signature = 'dusk:scraper {name : The name of the class} {--with-job}';
 
     /**
      * The console command description.
@@ -27,6 +28,23 @@ class ScraperCommand extends GeneratorCommand
      * @var string
      */
     protected $type = 'Scraper';
+
+    /**
+     * Handle the console command.
+     *
+     * @return mixed
+     */
+    public function handle()
+    {
+        $result = parent::handle();
+        if ($this->option('with-job')) {
+            Artisan::call('dusk:scraper-job', [
+                'name' => $this->argument('name').'Job', 
+                'scraper' => $this->argument('name')
+            ]);
+        }
+        return $result;
+    }
 
     /**
      * Get the stub file for the generator.
