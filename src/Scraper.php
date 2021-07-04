@@ -19,21 +19,27 @@ abstract class Scraper
         $console_dir = storage_path('scrapers/'.$classname.'/console');
         $source_dir = storage_path('scrapers/'.$classname.'/source');
 
-        if (!file_exists($screenshots_dir)) { mkdir($screenshots_dir, 0777, true); }
-        if (!file_exists($console_dir)) { mkdir($console_dir, 0777, true); }
-        if (!file_exists($source_dir)) { mkdir($source_dir, 0777, true); }
+        if (!file_exists($screenshots_dir)) { mkdir($screenshots_dir, 0755, true); }
+        if (!file_exists($console_dir)) { mkdir($console_dir, 0755, true); }
+        if (!file_exists($source_dir)) { mkdir($source_dir, 0755, true); }
 
         ScraperBrowser::$baseUrl = $this->baseUrl();
-
         ScraperBrowser::$storeScreenshotsAt = $screenshots_dir;
-
         ScraperBrowser::$storeConsoleLogAt = $console_dir;
-
         ScraperBrowser::$storeSourceAt = $source_dir;
+    }
 
-        // ScraperBrowser::$userResolver = function () {
-        //     return $this->user();
-        // };
+    /**
+     * Scrape the page.
+     *
+     * @return void
+     */
+    public function scrape()
+    {
+        static::startChromeDriver();
+        $result = $this->handle();
+        static::stopChromeDriver();
+        return $result;
     }
 
     /**
